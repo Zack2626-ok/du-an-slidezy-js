@@ -4,8 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dự án slidezy</title>
+    <link rel="stylesheet" href="./style.css" />
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      .slidezy-slide {
+        padding: 30px;
+        text-align: center;
+        flex: 0 0 calc(100% / 3);
+      }
+
+      .slidezy-slide:nth-child(odd) {
+        background: limegreen;
+      }
+    </style>
   </head>
   <body>
+    <div id="mySider">
+      <div>slide 1</div>
+      <div>slide 2</div>
+      <div>slide 3</div>
+      <div>slide 4</div>
+      <div>slide 5</div>
+      <div>slide 6</div>
+      <div>slide 7</div>
+    </div>
     <script src="./slidezy.js"></script>
+    <script>
+      const mySlider = new Slidezy("#mySider");
+    </script>
   </body>
 </html>

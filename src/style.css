@@ -1,0 +1,27 @@
+.slidezy-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.slidezy-track {
+  display: flex;
+}
+
+.slidezy-prev,
+.slidezy-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 10px;
+  border: none;
+  outline: none;
+}
+
+.slidezy-prev {
+  left: 10px;
+}
+
+.slidezy-next {
+  right: 10px;
+}
