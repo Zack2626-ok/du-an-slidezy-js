@@ -14,7 +14,7 @@
       .slidezy-slide {
         padding: 30px;
         text-align: center;
-        flex: 0 0 calc(100% / 3);
+        flex: 0 0 auto;
       }
 
       .slidezy-slide:nth-child(odd) {
@@ -36,7 +36,10 @@
     </div>
     <script src="./slidezy.js"></script>
     <script>
-      const mySlider = new Slidezy("#mySider");
+      const mySlider = new Slidezy("#mySider", {
+        items: 3,
+        loop: true,
+      });
     </script>
   </body>
 </html>
