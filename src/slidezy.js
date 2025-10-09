@@ -17,8 +17,10 @@ function Slidezy(seletor, options = {}) {
   );
 
   this.slides = Array.from(this.container.children);
-  this.currentIndex = 0;
+  this.currentIndex = this.opt.loop ? this.opt.items : 0;
   this._init();
+
+  this._updatePosition();
 }
 
 Slidezy.prototype._init = function () {
@@ -32,12 +34,20 @@ Slidezy.prototype._createSlide = function () {
   this.track = document.createElement("div");
   this.track.className = "slidezy-track";
 
+  const cloneHead = this.slides
+    .slice(-this.opt.items)
+    .map((node) => node.cloneNode(true));
+  const cloneTail = this.slides
+    .slice(0, this.opt.items)
+    .map((node) => node.cloneNode(true));
+
+  this.slides = cloneHead.concat(this.slides.concat(cloneTail));
+
   this.slides.forEach((slide) => {
     slide.classList.add("slidezy-slide");
     slide.style.flexBasis = `calc(100% / ${this.opt.items})`;
     this.track.appendChild(slide);
   });
-
   this.container.append(this.track);
 };
 
@@ -58,16 +68,36 @@ Slidezy.prototype._createNavigation = function () {
 };
 
 Slidezy.prototype.moveSlide = function (step) {
+  if (this._isAnimating) return;
+  this._isAnimating = true;
   if (this.opt.loop) {
     this.currentIndex =
       (this.currentIndex + step + this.slides.length) % this.slides.length;
+
+    this._updatePosition();
+
+    this.track.ontransitionend = () => {
+      const maxIndex = this.slides.length - this.opt.items;
+      if (this.currentIndex <= 0) {
+        this.currentIndex = maxIndex - this.opt.items;
+      } else if (this.currentIndex >= maxIndex) {
+        this.currentIndex = this.opt.items;
+      }
+      this._updatePosition(true);
+      this._isAnimating = false;
+    };
   } else {
     this.currentIndex = Math.min(
       Math.max(this.currentIndex + step, 0),
       this.slides.length - this.opt.items
     );
+    this._updatePosition();
+    this._isAnimating = false;
   }
+};
 
+Slidezy.prototype._updatePosition = function (instant = false) {
+  this.track.style.transition = instant ? "none" : "transform 0.4s";
   this.offset = -(this.currentIndex * (100 / this.opt.items));
   this.track.style.transform = `translateX(${this.offset}%)`;
 };
